@@ -16,7 +16,7 @@ pub struct Empty {}
 #[serde(rename_all = "camelCase")]
 pub struct ServerTimeResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: ServerTime,
@@ -70,7 +70,7 @@ impl<'a> KlineRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct KlineResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: KlineSummary,
@@ -104,7 +104,7 @@ pub struct Kline {
 #[serde(rename_all = "camelCase")]
 pub struct MarkPriceKlineResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: MarkPriceKlineSummary,
@@ -136,7 +136,7 @@ pub struct MarkPriceKline {
 #[serde(rename_all = "camelCase")]
 pub struct IndexPriceKlineResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: IndexPriceKlineSummary,
@@ -168,7 +168,7 @@ pub struct IndexPriceKline {
 #[serde(rename_all = "camelCase")]
 pub struct PremiumIndexPriceKlineResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: PremiumIndexPriceKlineSummary,
@@ -229,7 +229,7 @@ impl<'a> InstrumentRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct FuturesInstrumentsInfoResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: FuturesInstrumentsInfo,
@@ -294,7 +294,7 @@ pub struct FuturesInstrument {
 #[serde(rename_all = "camelCase")]
 pub struct SpotInstrumentsInfoResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: SpotInstrumentsInfo,
@@ -469,7 +469,7 @@ impl<'a> OrderbookRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct OrderBookResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: OrderBook,
@@ -526,7 +526,7 @@ impl Ask {
 #[serde(rename_all = "camelCase")]
 pub struct FuturesTickersResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: FuturesTickers,
@@ -538,7 +538,7 @@ pub struct FuturesTickersResponse {
 #[serde(rename_all = "camelCase")]
 pub struct SpotTickersResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: SpotTickers,
@@ -645,8 +645,8 @@ pub struct SpotTicker {
 pub struct FundingHistoryRequest<'a> {
     pub category: Category,
     pub symbol: Cow<'a, str>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub limit: Option<u64>,
 }
 impl<'a> FundingHistoryRequest<'a> {
@@ -656,15 +656,15 @@ impl<'a> FundingHistoryRequest<'a> {
     pub fn new(
         category: Category,
         symbol: &'a str,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         limit: Option<u64>,
     ) -> FundingHistoryRequest<'a> {
         FundingHistoryRequest {
             category,
             symbol: Cow::Borrowed(symbol),
-            start_time: start_time.map(|s| Cow::Borrowed(s)),
-            end_time: end_time.map(|s| Cow::Borrowed(s)),
+            start_time,
+            end_time,
             limit,
         }
     }
@@ -674,7 +674,7 @@ impl<'a> FundingHistoryRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct FundingRateResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: FundingRateSummary,
@@ -730,7 +730,7 @@ impl<'a> RecentTradesRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct RecentTradesResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: RecentTrades,
@@ -799,7 +799,7 @@ impl<'a> OpenInterestRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct OpeninterestResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: OpenInterestSummary,
@@ -858,7 +858,7 @@ impl<'a> HistoricalVolatilityRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct HistoricalVolatilityResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub category: String,
@@ -880,7 +880,7 @@ pub struct HistoricalVolatility {
 #[serde(rename_all = "camelCase")]
 pub struct InsuranceResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: InsuranceSummary,
@@ -927,7 +927,7 @@ impl<'a> RiskLimitRequest<'a> {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct RiskLimitResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: RiskLimitSummary,
@@ -961,7 +961,7 @@ pub struct RiskLimit {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DeliveryPriceResponse {
-    pub ret_code: i16,
+    pub ret_code: i32,
     pub ret_msg: String,
     pub result: DeliveryPriceSummary,
     pub ret_ext_info: Empty,
@@ -990,7 +990,7 @@ pub struct DeliveryPrice {
 #[serde(rename_all = "camelCase")]
 pub struct LongShortRatioResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: LongShortRatioSummary,
@@ -1431,7 +1431,7 @@ impl<'a> OrderRequest<'a> {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct AmendOrderResponse {
-    pub ret_code: i16,
+    pub ret_code: i32,
     pub ret_msg: String,
     pub result: OrderStatus,
     pub ret_ext_info: Empty,
@@ -1530,7 +1530,7 @@ pub struct CancelOrderRequest<'a> {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CancelOrderResponse {
-    pub ret_code: i16,
+    pub ret_code: i32,
     pub ret_msg: String,
     pub result: OrderStatus,
     pub ret_ext_info: Empty,
@@ -1596,7 +1596,7 @@ impl<'a> OpenOrdersRequest<'a> {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct OpenOrdersResponse {
-    pub ret_code: i16,
+    pub ret_code: i32,
     pub ret_msg: String,
     pub result: OrderHistory,
     pub ret_ext_info: Empty,
@@ -1616,7 +1616,7 @@ pub struct OrderStatus {
 #[serde(rename_all = "camelCase")]
 pub struct OrderResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: OrderStatus,
@@ -1635,8 +1635,8 @@ pub struct OrderHistoryRequest<'a> {
     pub order_link_id: Option<Cow<'a, str>>,
     pub order_filter: Option<Cow<'a, str>>,
     pub order_status: Option<Cow<'a, str>>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub limit: Option<u64>,
 }
 
@@ -1665,8 +1665,8 @@ impl<'a> OrderHistoryRequest<'a> {
         order_link_id: Option<&'a str>,
         order_filter: Option<&'a str>,
         order_status: Option<&'a str>,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         limit: Option<u64>,
     ) -> Self {
         Self {
@@ -1678,8 +1678,8 @@ impl<'a> OrderHistoryRequest<'a> {
             order_link_id: order_link_id.map(Cow::Borrowed),
             order_filter: order_filter.map(Cow::Borrowed),
             order_status: order_status.map(Cow::Borrowed),
-            start_time: start_time.map(Cow::Borrowed),
-            end_time: end_time.map(Cow::Borrowed),
+            start_time,
+            end_time,
             limit,
         }
     }
@@ -1689,7 +1689,7 @@ impl<'a> OrderHistoryRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct OrderHistoryResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: OrderHistory,
@@ -1941,7 +1941,7 @@ impl<'a> CancelallRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct CancelallResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: CancelledList,
@@ -1959,7 +1959,7 @@ pub struct CancelledList {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct TradeHistoryResponse {
-    pub ret_code: i16,
+    pub ret_code: i32,
     pub ret_msg: String,
     pub result: TradeHistorySummary,
     pub ret_ext_info: Empty,
@@ -2061,8 +2061,8 @@ pub struct TradeHistoryRequest<'a> {
     pub order_id: Option<Cow<'a, str>>,
     pub order_link_id: Option<Cow<'a, str>>,
     pub base_coin: Option<Cow<'a, str>>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub exec_type: Option<Cow<'a, str>>,
     pub limit: Option<u64>,
 }
@@ -2087,8 +2087,8 @@ impl<'a> TradeHistoryRequest<'a> {
         order_id: Option<&'a str>,
         order_link_id: Option<&'a str>,
         base_coin: Option<&'a str>,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         exec_type: Option<&'a str>,
         limit: Option<u64>,
     ) -> TradeHistoryRequest<'a> {
@@ -2098,8 +2098,8 @@ impl<'a> TradeHistoryRequest<'a> {
             order_id: order_id.map(|s| Cow::Borrowed(s)),
             order_link_id: order_link_id.map(|s| Cow::Borrowed(s)),
             base_coin: base_coin.map(|s| Cow::Borrowed(s)),
-            start_time: start_time.map(|s| Cow::Borrowed(s)),
-            end_time: end_time.map(|s| Cow::Borrowed(s)),
+            start_time,
+            end_time,
             exec_type: exec_type.map(|s| Cow::Borrowed(s)),
             limit,
         }
@@ -2120,7 +2120,7 @@ impl<'a> BatchPlaceRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct BatchPlaceResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: BatchedOrderList,
@@ -2177,7 +2177,7 @@ impl<'a> BatchAmendRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct BatchAmendResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: AmendedOrderList,
@@ -2222,7 +2222,7 @@ impl<'a> BatchCancelRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct BatchCancelResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: CanceledOrderList,
@@ -2875,8 +2875,8 @@ pub struct AddReduceMarginResult {
 pub struct ClosedPnlRequest<'a> {
     pub category: Category,
     pub symbol: Option<Cow<'a, str>>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub limit: Option<u64>,
 }
 
@@ -2884,15 +2884,15 @@ impl<'a> ClosedPnlRequest<'a> {
     pub fn new(
         category: Category,
         symbol: Option<&'a str>,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         limit: Option<u64>,
     ) -> Self {
         Self {
             category,
             symbol: symbol.map(|s| Cow::Borrowed(s)),
-            start_time: start_time.map(|s| Cow::Borrowed(s)),
-            end_time: end_time.map(|s| Cow::Borrowed(s)),
+            start_time,
+            end_time,
             limit,
         }
     }
@@ -3009,8 +3009,8 @@ pub struct MovePositionResult {
 pub struct MoveHistoryRequest<'a> {
     pub category: Option<Category>,
     pub symbol: Option<Cow<'a, str>>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub status: Option<Cow<'a, str>>,
     pub block_trade_id: Option<Cow<'a, str>>,
     pub limit: Option<Cow<'a, str>>,
@@ -3020,8 +3020,8 @@ impl<'a> MoveHistoryRequest<'a> {
     pub fn new(
         category: Option<Category>,
         symbol: Option<&'a str>,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         status: Option<&'a str>,
         block_trade_id: Option<&'a str>,
         limit: Option<&'a str>,
@@ -3029,8 +3029,8 @@ impl<'a> MoveHistoryRequest<'a> {
         Self {
             category,
             symbol: symbol.map(|s| Cow::Borrowed(s)),
-            start_time: start_time.map(|s| Cow::Borrowed(s)),
-            end_time: end_time.map(|s| Cow::Borrowed(s)),
+            start_time,
+            end_time,
             status: status.map(|s| Cow::Borrowed(s)),
             block_trade_id: block_trade_id.map(|s| Cow::Borrowed(s)),
             limit: limit.map(|s| Cow::Borrowed(s)),
@@ -3045,7 +3045,7 @@ impl<'a> MoveHistoryRequest<'a> {
 #[serde(rename_all = "camelCase")]
 pub struct MoveHistoryResponse {
     #[serde(rename = "retCode")]
-    pub ret_code: i16,
+    pub ret_code: i32,
     #[serde(rename = "retMsg")]
     pub ret_msg: String,
     pub result: MoveHistoryResult,
@@ -3147,22 +3147,22 @@ pub struct UnifiedUpdateMsg {
 #[derive(Clone, Debug, Default)]
 pub struct BorrowHistoryRequest<'a> {
     pub coin: Option<Cow<'a, str>>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub limit: Option<Cow<'a, str>>,
 }
 
 impl<'a> BorrowHistoryRequest<'a> {
     pub fn new(
         coin: Option<&'a str>,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         limit: Option<&'a str>,
     ) -> Self {
         Self {
             coin: coin.map(|s| Cow::Borrowed(s)),
-            start_time: start_time.map(|s| Cow::Borrowed(s)),
-            end_time: end_time.map(|s| Cow::Borrowed(s)),
+            start_time,
+            end_time,
             limit: limit.map(|s| Cow::Borrowed(s)),
         }
     }
@@ -3367,8 +3367,8 @@ pub struct TransactionLogRequest<'a> {
     pub currency: Option<Cow<'a, str>>,
     pub base_coin: Option<Cow<'a, str>>,
     pub log_type: Option<Cow<'a, str>>,
-    pub start_time: Option<Cow<'a, str>>,
-    pub end_time: Option<Cow<'a, str>>,
+    pub start_time: Option<u64>,
+    pub end_time: Option<u64>,
     pub limit: Option<u32>,
 }
 
@@ -3379,8 +3379,8 @@ impl<'a> TransactionLogRequest<'a> {
         currency: Option<&'a str>,
         base_coin: Option<&'a str>,
         log_type: Option<&'a str>,
-        start_time: Option<&'a str>,
-        end_time: Option<&'a str>,
+        start_time: Option<u64>,
+        end_time: Option<u64>,
         limit: Option<u32>,
     ) -> Self {
         Self {
@@ -3389,8 +3389,8 @@ impl<'a> TransactionLogRequest<'a> {
             currency: currency.map(|s| Cow::Borrowed(s)),
             base_coin: base_coin.map(|s| Cow::Borrowed(s)),
             log_type: log_type.map(|s| Cow::Borrowed(s)),
-            start_time: start_time.map(|s| Cow::Borrowed(s)),
-            end_time: end_time.map(|s| Cow::Borrowed(s)),
+            start_time,
+            end_time,
             limit,
         }
     }
