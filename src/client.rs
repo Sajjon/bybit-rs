@@ -215,6 +215,34 @@ impl Client {
         self.handler(response).await
     }
 
+    pub async fn post_signed2<T: DeserializeOwned + Send + 'static>(
+        &self,
+        endpoint: API,
+        recv_window: u16,
+        raw_request_body: Option<String>,
+    ) -> Result<T, BybitError> {
+        // Construct the full URL
+        let url = format!("{}{}", self.host, endpoint.as_ref());
+
+        // Sign the request, passing the raw request body for signature
+        // The request is signed with the API secret key and requires
+        // the `recv_window` for the request to be within the specified timeframe.
+        let headers =
+            self.build_signed_headers(true, true, recv_window, raw_request_body.clone())?;
+
+        // Make the signed HTTP POST request
+        let client = &self.inner_client;
+        let response = client
+            .post(url)
+            .headers(headers)
+            .body(raw_request_body.unwrap_or_default())
+            .send()
+            .await?;
+
+        // Handle the response
+        self.handler2(response).await
+    }
+
     /// Builds the signed headers for an HTTP request.
     ///
     /// # Arguments
@@ -417,6 +445,36 @@ impl Client {
             status => Err(BybitError::StatusCode(status.as_u16())),
         }
     }
+
+async fn handler2<T: DeserializeOwned + Send + 'static>(
+        &self,
+        response: ReqwestResponse,
+    ) -> Result<T, BybitError> {
+        // Match the status code of the response
+        match response.status() {
+            // If the status code is OK, deserialize the response body into T and return it
+            StatusCode::OK => {
+                let resp = response.text().await?;
+                println!("🐞 Response: {}", resp);
+                panic!("🐞 😈 kill")
+            },
+            // If the status code is BAD_REQUEST, deserialize the response body into BybitContentError and
+            // wrap it in BybitError and return it
+            StatusCode::BAD_REQUEST => {
+                let error: BybitContentError = response.json().await.map_err(BybitError::from)?;
+                Err(BybitError::BybitError(error).into())
+            }
+            // If the status code is INTERNAL_SERVER_ERROR, return BybitError::InternalServerError
+            StatusCode::INTERNAL_SERVER_ERROR => Err(BybitError::InternalServerError),
+            // If the status code is SERVICE_UNAVAILABLE, return BybitError::ServiceUnavailable
+            StatusCode::SERVICE_UNAVAILABLE => Err(BybitError::ServiceUnavailable),
+            // If the status code is UNAUTHORIZED, return BybitError::Unauthorized
+            StatusCode::UNAUTHORIZED => Err(BybitError::Unauthorized),
+            // If the status code is any other value, wrap it in BybitError::StatusCode and return it
+            status => Err(BybitError::StatusCode(status.as_u16())),
+        }
+    }
+
 
     /// Connects to the Bybit WebSocket endpoint and sends an authentication message.
     ///

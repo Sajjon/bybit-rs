@@ -82,7 +82,7 @@ impl Trader {
         let request = build_json_request(&parameters);
         let response: OrderResponse = self
             .client
-            .post_signed(
+            .post_signed2(
                 API::Trade(Trade::Place),
                 self.recv_window.into(),
                 Some(request),
